@@ -24,11 +24,11 @@ function onConnect (responseCode) {
 
 function onFrame (frame) {
     // Get image metadata
-    var width = frame.width;
-    var height = frame.height; 
-    var horizontal = frame.angle.horizontal; 
-    var tilt = frame.angle.tilt; 
-    var type = frame.detection.type;
+    let width = frame.width;
+    let height = frame.height;
+    let horizontal = frame.angle.horizontal;
+    let tilt = frame.angle.tilt;
+    let type = frame.detection.type;
 
     // Find Human Subjects in frame
     if (type === 'Human'){
@@ -48,6 +48,10 @@ function onFrame (frame) {
             var rightEyeY = subjects[i].rightEyeY;
             human = {
                 id: id,
+                width: width,
+                height: height,
+                horizontal: horizontal,
+                tilt: tilt,
                 cenX: cenX,
                 cenY: cenY,
                 leftEyeX: leftEyeX,

@@ -1,3 +1,6 @@
 *.py[cod]
 node_modules/
 APISCripts/config.txt
+__pycache__/
+db.sqlite3
+

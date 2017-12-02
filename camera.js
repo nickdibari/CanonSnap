@@ -29,6 +29,7 @@ function onFrame (frame) {
     let horizontal = frame.angle.horizontal;
     let tilt = frame.angle.tilt;
     let type = frame.detection.type;
+    let img = frame.image;
 
     // Find Human Subjects in frame
     if (type === 'Human'){
@@ -48,6 +49,7 @@ function onFrame (frame) {
             var rightEyeY = subjects[i].rightEyeY;
             human = {
                 id: id,
+                img: img,
                 width: width,
                 height: height,
                 horizontal: horizontal,

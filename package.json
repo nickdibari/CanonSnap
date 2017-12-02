@@ -1,0 +1,22 @@
+{
+  "name": "cannonsnap",
+  "version": "1.0.0",
+  "description": "Utility to programitcally take pictures with the MM100-WS camera",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nickdibari/CanonSnap.git"
+  },
+  "keywords": [
+    "canon"
+  ],
+  "author": "DiBari et al.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nickdibari/CanonSnap/issues"
+  },
+  "homepage": "https://github.com/nickdibari/CanonSnap#readme"
+}

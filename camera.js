@@ -82,6 +82,7 @@ function onFrame (frame) {
 
 function determineSnap(subjectList){
     let takePicture = 0;
+    let threshold = 10;
 
     let newSubject = newPerson(subjectList);
 
@@ -90,7 +91,12 @@ function determineSnap(subjectList){
         takePicture += 10;
     }
 
-    return takePicture >= 10;
+    if (subjectList.length > 1){
+        console.log('Got a group!')
+        takePicture += 10;
+    }
+
+    return takePicture >= threshold;
 }
 
 function newPerson(subjectList){

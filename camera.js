@@ -3,6 +3,7 @@
 const Camera = require('howielib').MMCamera;
 const logger = require('howielib').Logger;
 const assert = require('assert');
+const fs = require('fs');
 
 logger.setLevel('info');
 
@@ -39,6 +40,11 @@ function onFrame (frame) {
             // Get image from frame
             let img = frame.image;
             console.log('Got picture OK');
+            fs.writeFile('tmp.jpg', img, function (err) {
+                if (err){
+                    console.error('Error writing image to file: ' + err)
+                }
+            });
         }
     }
 

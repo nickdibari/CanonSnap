@@ -6,6 +6,8 @@ const logger = require('howielib').Logger;
 
 logger.setLevel('info');
 
+let HUMAN_IDS = [];
+
 let camera = new Camera();
 
 camera.ipConnect(onConnect);
@@ -32,6 +34,7 @@ function onFrame (frame) {
     let img = frame.image;
 
     // Find Human Subjects in frame
+    // Determine if Snap should be taken
     if (type === 'Human'){
         console.log('Got a live one!');
         var subjects = frame.detection.subjects;
@@ -62,12 +65,62 @@ function onFrame (frame) {
                 rightEyeY: rightEyeY,
             };
             console.log('Properly parsed Human: ' + id);
-            subjectList.push(human)
-            console.log(subjectList)
+            subjectList.push(human);
         }
+
+        var takePicture = determineSnap(subjectList);
     }
 
     else{
         console.log('No humans here..')
     }
+}
+
+function determineSnap(subjectList){
+    let takePicture = 0;
+
+    let newSubject = newPerson(subjectList);
+
+    if (newSubject){
+        console.log('Got a new person!')
+    }
+
+    else{
+        console.log('Nobody new...')
+    }
+
+    //return takePicture;
+}
+
+function newPerson(subjectList){
+    // Parse list of subjects to see if there are any new people in group
+    let newPerson = false;
+    let len = subjectList.length;
+
+    for(let i=0; i<len; i++){
+        if (!inArray(subjectList[i].id, HUMAN_IDS)){
+            newPerson = true; // Found human in list of subjects not in global array
+        }
+    }
+
+    // Repopulate global list
+    HUMAN_IDS = [];
+    for(let j=0; j<len; j++){
+        HUMAN_IDS[j] = subjectList[j].id;
+    }
+
+    return newPerson;
+}
+
+function inArray(needle, haystack){
+    // Determine if the needle is in the haystack
+    let len = haystack.length;
+
+    for(let i=0; i<len; i++){
+        if (haystack[i] === needle){
+            return true;
+        }
+    }
+
+    return false;
 }

@@ -38,11 +38,18 @@ function onFrame (frame) {
 
         if (takePicture){
             console.log('Taking picture!!!!')
-            let picturePromise = camera.snap();
-            picturePromise.then((response) => {
+            camera.snap().then((response) => {
                 assert(response.code === 'OK');
 
                 // Get the picture from the camera
+                camera.getLastImage().then((items) => {
+                    let img = items[0].image;
+                    console.log('Got image OK!')
+                })
+
+                .catch((error) => {
+                    console.error('Cannot get picture: ' + error);
+                })
 
             })
             .catch((error) => {

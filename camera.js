@@ -1,7 +1,6 @@
 'use strict';
 
 const Camera = require('howielib').MMCamera;
-const Discovery = require('howielib').Discovery;
 const logger = require('howielib').Logger;
 const assert = require('assert');
 
@@ -37,24 +36,9 @@ function onFrame (frame) {
         var takePicture = determineSnap(subjectList);
 
         if (takePicture){
-            console.log('Taking picture!!!!')
-            camera.snap().then((response) => {
-                assert(response.code === 'OK');
-
-                // Get the picture from the camera
-                camera.getLastImage().then((items) => {
-                    let img = items[0].image;
-                    console.log('Got image OK!')
-                })
-
-                .catch((error) => {
-                    console.error('Cannot get picture: ' + error);
-                })
-
-            })
-            .catch((error) => {
-                console.error('Cannot take picture: ' + error);
-            });
+            // Get image from frame
+            let img = frame.image;
+            console.log('Got picture OK');
         }
     }
 
@@ -102,12 +86,12 @@ function determineSnap(subjectList){
     let newSubject = newPerson(subjectList);
 
     if (newSubject){
-        console.log('Got a new person!')
+        console.log('Got a new person!');
         takePicture += 10;
     }
 
     if (subjectList.length > 1){
-        console.log('Got a group!')
+        console.log('Got a group!');
         takePicture += 10;
     }
 

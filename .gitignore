@@ -3,4 +3,4 @@ node_modules/
 APIScripts/config.txt
 __pycache__/
 db.sqlite3
-
+.DS_Store

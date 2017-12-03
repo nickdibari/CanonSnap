@@ -69,6 +69,10 @@ function onFrame (frame) {
         }
 
         var takePicture = determineSnap(subjectList);
+
+        if (takePicture){
+            console.log('Taking picture!!!!')
+        }
     }
 
     else{
@@ -83,13 +87,10 @@ function determineSnap(subjectList){
 
     if (newSubject){
         console.log('Got a new person!')
+        takePicture += 10;
     }
 
-    else{
-        console.log('Nobody new...')
-    }
-
-    //return takePicture;
+    return takePicture >= 10;
 }
 
 function newPerson(subjectList){

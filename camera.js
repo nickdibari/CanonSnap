@@ -26,48 +26,13 @@ function onConnect (responseCode) {
 }
 
 function onFrame (frame) {
-    // Get image metadata
-    let width = frame.width;
-    let height = frame.height;
-    let horizontal = frame.angle.horizontal;
-    let tilt = frame.angle.tilt;
     let type = frame.detection.type;
-    let img = frame.image;
 
     // Find Human Subjects in frame
     // Determine if Snap should be taken
     if (type === 'Human'){
         console.log('Got a live one!');
-        var subjects = frame.detection.subjects;
-        var len = frame.detection.subjects.length;
-        let subjectList = [];
-
-        for (let i = 0; i < len; i++){
-            var human = {};
-            var id = subjects[i].subjectID;
-            var cenX = subjects[i].centerX;
-            var cenY = subjects[i].centerY;
-            var leftEyeX = subjects[i].leftEyeX;
-            var leftEyeY = subjects[i].leftEyeY;
-            var rightEyeX = subjects[i].rightEyeX;
-            var rightEyeY = subjects[i].rightEyeY;
-            human = {
-                id: id,
-                img: img,
-                width: width,
-                height: height,
-                horizontal: horizontal,
-                tilt: tilt,
-                cenX: cenX,
-                cenY: cenY,
-                leftEyeX: leftEyeX,
-                leftEyeY: leftEyeY,
-                rightEyeX: rightEyeX,
-                rightEyeY: rightEyeY,
-            };
-            console.log('Properly parsed Human: ' + id);
-            subjectList.push(human);
-        }
+        let subjectList = handleHumans(frame);
 
         var takePicture = determineSnap(subjectList);
 
@@ -81,14 +46,46 @@ function onFrame (frame) {
 
             })
             .catch((error) => {
-                console.error('Cannot take picture: ' + error)
+                console.error('Cannot take picture: ' + error);
             });
         }
     }
 
     else{
-        console.log('No humans here..')
+        console.log('No humans here..');
     }
+}
+
+function handleHumans(frame){
+    var subjects = frame.detection.subjects;
+    var len = frame.detection.subjects.length;
+    let subjectList = [];
+
+    for (let i = 0; i < len; i++){
+        // Get image metadata
+        let subject = {
+            width: frame.width,
+            height: frame.height,
+            horizontal: frame.angle.horizontal,
+            tilt: frame.angle.tilt,
+            type: frame.detection.type,
+            img: frame.image,
+        };
+
+        // Get subject data
+        subject.id = subjects[i].subjectID;
+        subject.cenX = subjects[i].centerX;
+        subject.cenY = subjects[i].centerY;
+        subject.leftEyeX = subjects[i].leftEyeX;
+        subject.leftEyeY = subjects[i].leftEyeY;
+        subject.rightEyeX = subjects[i].rightEyeX;
+        subject.rightEyeY = subjects[i].rightEyeY;
+
+        subjectList.push(subject);
+        console.log('Properly parsed Human: ' + subject.id);
+    }
+
+    return subjectList;
 }
 
 function determineSnap(subjectList){

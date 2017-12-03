@@ -36,10 +36,20 @@ function onFrame (frame) {
     // Find Human Subjects in frame
     // Determine if Snap should be taken
     if (type === 'Human'){
+        // Get frame metadata
+        let frame = {
+            shake: frame.shake,
+            width: frame.width,
+            height: frame.height,
+            horizontal: frame.angle.horizontal,
+            tilt: frame.angle.tilt,
+            type: frame.detection.typ
+        };
+
         console.log('Got a live one!');
         let subjectList = handleHumans(frame);
 
-        var takePicture = determineSnap(subjectList);
+        var takePicture = determineSnap(subjectList, frame);
 
         if (takePicture){
             // Get image from frame
@@ -67,24 +77,16 @@ function handleHumans(frame){
     let subjectList = [];
 
     for (let i = 0; i < len; i++){
-        // Get image metadata
+        // Get image and subject metadata
         let subject = {
-            width: frame.width,
-            height: frame.height,
-            horizontal: frame.angle.horizontal,
-            tilt: frame.angle.tilt,
-            type: frame.detection.type,
-            shake: frame.shake,
+            id: subjects[i].subjectID,
+            cenX: subjects[i].centerX,
+            cenY: subjects[i].centerY,
+            leftEyeX: subjects[i].leftEyeX,
+            leftEyeY: subjects[i].leftEyeY,
+            rightEyeX: subjects[i].rightEyeX,
+            rightEyeY: subjects[i].rightEyeY,
         };
-
-        // Get subject data
-        subject.id = subjects[i].subjectID;
-        subject.cenX = subjects[i].centerX;
-        subject.cenY = subjects[i].centerY;
-        subject.leftEyeX = subjects[i].leftEyeX;
-        subject.leftEyeY = subjects[i].leftEyeY;
-        subject.rightEyeX = subjects[i].rightEyeX;
-        subject.rightEyeY = subjects[i].rightEyeY;
 
         subjectList.push(subject);
         console.log('Properly parsed Human: ' + subject.id);
@@ -93,7 +95,7 @@ function handleHumans(frame){
     return subjectList;
 }
 
-function determineSnap(subjectList){
+function determineSnap(subjectList, frame){
     // Determine if the frame image should be saved
     // Set to take a picture if there is a new human in the frame
     // or there is a group of people in the frame
@@ -109,11 +111,11 @@ function determineSnap(subjectList){
 
     if (subjectList.length > 1){
         console.log('Got a group!');
-        takePicture += 5;
+        takePicture += 10;
     }
 
     // Check if picture is blurred
-    if (subjectList[0].shake !== 'SmallVibration'){
+    if (frame.shake !== 'SmallVibration'){
         takePicture -= 2;
     }
 

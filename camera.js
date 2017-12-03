@@ -14,8 +14,10 @@ let camera = new Camera();
 camera.ipConnect(onConnect);
 
 function onConnect (responseCode) {
+    // Callback function to ipConnect
+    // Logs error if received, else starts stream
     if (responseCode !== 'OK'){
-        console.log('Problem connecting to camera: ' + responseCode);
+        console.error('Problem connecting to camera: ' + responseCode);
         return;
     }
 
@@ -26,6 +28,9 @@ function onConnect (responseCode) {
 }
 
 function onFrame (frame) {
+    // Callback function to startStream
+    // Takes in a frame object and determines if the image should be saved
+    // If it should, writes to a JPG file
     let type = frame.detection.type;
 
     // Find Human Subjects in frame
@@ -54,6 +59,9 @@ function onFrame (frame) {
 }
 
 function handleHumans(frame){
+    // Pull image on humans in a frame
+    // Takes in a frame object and returns a list of objects corresponding to
+    // each human in the frame
     var subjects = frame.detection.subjects;
     var len = frame.detection.subjects.length;
     let subjectList = [];
@@ -86,6 +94,9 @@ function handleHumans(frame){
 }
 
 function determineSnap(subjectList){
+    // Determine if the frame image should be saved
+    // Set to take a picture if there is a new human in the frame
+    // or there is a group of people in the frame
     let takePicture = 0;
     let threshold = 10;
 

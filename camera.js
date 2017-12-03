@@ -74,7 +74,7 @@ function handleHumans(frame){
             horizontal: frame.angle.horizontal,
             tilt: frame.angle.tilt,
             type: frame.detection.type,
-            img: frame.image,
+            shake: frame.shake,
         };
 
         // Get subject data
@@ -109,7 +109,12 @@ function determineSnap(subjectList){
 
     if (subjectList.length > 1){
         console.log('Got a group!');
-        takePicture += 10;
+        takePicture += 5;
+    }
+
+    // Check if picture is blurred
+    if (subjectList[0].shake !== 'SmallVibration'){
+        takePicture -= 2;
     }
 
     return takePicture >= threshold;

@@ -6,4 +6,5 @@ app_name = 'webapp'
 
 urlpatterns = [
     path('', views.index, name='index'),
-] 
+    path('images', views.handleImageUploader, name='imageUploader'), 
+]

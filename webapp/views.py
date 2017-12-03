@@ -5,9 +5,19 @@ from django.http import HttpResponse
 #from django.template import loader
 from django.shortcuts import render
 
+from .forms import ImageForm
+
 
 def index(request):
     return render(request, 'webapp/index.html')
+
+def handleImageUploader(request):
+    if request.method == "POST":
+        form = ImageForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('OK')
+
 
 """
 from .models import Question

@@ -3,6 +3,7 @@
 const Camera = require('howielib').MMCamera;
 const Discovery = require('howielib').Discovery;
 const logger = require('howielib').Logger;
+const assert = require('assert');
 
 logger.setLevel('info');
 
@@ -72,6 +73,16 @@ function onFrame (frame) {
 
         if (takePicture){
             console.log('Taking picture!!!!')
+            let picturePromise = camera.snap();
+            picturePromise.then((response) => {
+                assert(response.code === 'OK');
+
+                // Get the picture from the camera
+
+            })
+            .catch((error) => {
+                console.error('Cannot take picture: ' + error)
+            });
         }
     }
 
